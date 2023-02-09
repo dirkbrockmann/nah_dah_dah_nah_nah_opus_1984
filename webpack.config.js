@@ -18,6 +18,7 @@ module.exports = {
 		library: name,
   		template: './src/index.html',
   		anchor: name+"_container",
+   		fig_anchor: name+"_fig_container",
     	  description: meta.description,
 		scriptLoading: 'blocking'
       }),

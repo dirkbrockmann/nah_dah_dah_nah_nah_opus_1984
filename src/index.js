@@ -1,6 +1,7 @@
 import './styles.css'
 import cfg from "./container_config.js"
 import setup_container from "./setup_container.js"
+import figure from "./fig.js"
 import setup_interactions from "./setup_interactions.js"
 import setup_controls from "./controls.js"
 import {initialize as setup_simulation} from "./simulation.js"
@@ -26,4 +27,10 @@ const load = function (container_id,config=cfg) {
 	
 }
 
-export {load,cfg as config};
+const load_fig = function (fig_container_id,config=cfg) {
+	
+	figure(fig_container_id,config);
+	
+}
+
+export {load,cfg as config,load_fig};
