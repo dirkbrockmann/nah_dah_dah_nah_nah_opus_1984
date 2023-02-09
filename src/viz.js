@@ -1,47 +1,56 @@
 import * as d3 from "d3"
 import param from "./parameters.js"
-import {agents} from "./model.js"
-
-const L = param.L;
-const X = d3.scaleLinear().domain([0,L]);
-const Y = d3.scaleLinear().domain([0,L]);
+import {nodes,machine} from "./model.js"
 
 
-const update = (display) => {
+const X = d3.scaleLinear();
+const Y = d3.scaleLinear();
+
+var ctx,dL,W,H;
+
+
+function draw(display,config){
 	
-	display.selectAll(".node")
-		.style("fill", d => param.color_by_heading.widget.value() ? d3.interpolateSinebow(d.theta/2/Math.PI)  : "black")
+	ctx.clearRect(0, 0, W, H);
+	ctx.strokeStyle = "black";
+	ctx.strokeRect(0, 0, config.display_size.width, config.display_size.height);		
+
+	nodes.filter(function(n){return n.state==1}).forEach(d=>{
+		const c = d.cell();
+		ctx.fillStyle="black"
+		ctx.fillRect(X(c[0].x), Y(c[0].y), (X(c[2].x)-X(c[0].x)), (Y(c[2].y)-Y(c[0].y)));
+	})
+	
+	ctx.strokeStyle = "black";
+	ctx.strokeRect(0, 0, config.display_size.width, config.display_size.height);	
+	
+	
+}
+
+
+const update = (display,config) => {
+	
+	draw(display,config)
 	
 }
 
 const initialize = (display,config) => {
 
-	const W = config.display_size.width;
-	const H = config.display_size.height;
+	W = config.display_size.width;
+	H = config.display_size.height;
+			
+	X.range([0,W]).domain([0,machine.N]);
+	Y.range([0,H]).domain([0,machine.N]);
 	
-	X.range([0,W]);
-	Y.range([0,H]);
-		
-	display.selectAll("#origin").remove();
-	display.selectAll(".node").remove();
+	ctx = display.node().getContext('2d');
 	
-	const origin = display.append("g").attr("id","origin")
-	
-	origin.selectAll(".node").data(agents).enter().append("circle")
-		.attr("class","node")
-		.attr("cx",d=>X(d.x))
-		.attr("cy",d=>Y(d.y))
-		.attr("r",X(param.agentsize/2))
-		.style("fill", d => param.color_by_heading.widget.value() ? d3.interpolateSinebow(d.theta/2/Math.PI)  : "black")
+	draw(display,config)
 	
 };
 
-const go = (display) => {
+const go = (display,config) => {
 	
-	display.selectAll(".node")
-		.attr("cx",d=>X(d.x))
-		.attr("cy",d=>Y(d.y))
-		.style("fill", d => param.color_by_heading.widget.value() ? d3.interpolateSinebow(d.theta/2/Math.PI)  : "black")
+	draw(display,config)
 	
 }
 

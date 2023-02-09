@@ -1,24 +1,54 @@
-import {interval} from "d3"
+import {interval,select} from "d3"
 import * as ct from "./controls.js"
 import cfg from "./config.js"
 import param from "./parameters.js"
 import resetparameters from "./reset_parameters.js"
 import {iterate,initialize,update} from "./simulation.js"
-
+import {systems as machines} from "./machines.js"
 
 var timer = {}
 
-const startstop = (display) => {
-	ct.go.value() == 1 ? timer = interval(()=>iterate(display),cfg.simulation.delay) : timer.stop()
+const startstop = (display,config) => {
+	const delay = machines[param.systems.widget.value()].delay
+	ct.go.value() == 1 ? timer = interval(()=>iterate(display,config),delay) : timer.stop()
 
+}
+
+
+function update_slider_visibility(controls){
+	if(ct.go.value()==true ||  machines[param.systems.widget.value()].name != "random") {
+		controls.select("#slider_"+param.density.widget.id()).transition().style("opacity",0)
+		controls.select("#slider_"+param.density.widget.id()).select(" .track-overlay").style("pointer-events","none")
+	} else {
+		controls.select("#slider_"+param.density.widget.id()).transition().style("opacity",1)
+		controls.select("#slider_"+param.density.widget.id()).select(" .track-overlay").style("pointer-events","all")
+	}
 }
 
 export default (display,controls,config) => {
 	
 	ct.reset.update(()=>resetparameters(controls))	
-	ct.go.update(()=>startstop(display))
+	ct.go.update(()=>{
+		update_slider_visibility(controls)
+		startstop(display,config)
+	})
 	ct.setup.update(()=>initialize(display,config))
-	param.number_of_particles.widget.update(()=>initialize(display,config))
+	
+	
+	param.density.widget.update_end(()=>update(display,config))
+	// add toggle of visibilty of slider!!
+	
+	param.systems.widget.update(()=>{
+		
+		update_slider_visibility(controls)
+		
+		if (ct.go.value()) {ct.go.press(controls)}
+		
+		initialize(display,config)
+		
+	})
+	
+	//
 	
 }
 

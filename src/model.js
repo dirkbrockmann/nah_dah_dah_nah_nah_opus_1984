@@ -1,29 +1,35 @@
 
 import param from "./parameters.js"
-import {each,range,map,mean} from "lodash-es"
+import {each,range,map,mean,sumBy} from "lodash-es"
 import {rad2deg,deg2rad} from "./utils"
+import setup_machine,{systems as machines} from "./machines.js"
+import {square_simple as square} from "lattices"
 
 const L = param.L;
 const dt = param.dt;
 
-var agents = [];
+let nodes = [];
+let G = {};
+let machine = {};
 
 const initialize = () => {
 
 	// set/reset timer
 	param.timer={}; param.tick=0;
 
-	// make agents
+	machine = machines[param.systems.widget.value()];
 
-	const N = param.number_of_particles.choices[param.number_of_particles.widget.value()];
+	G = square(machine.N).boundary(machine.boundary);
+	nodes = G.nodes;
 	
-	agents = map(range(N), i => { return {
-				index:i, 
-				x:L*Math.random(), 
-				y:L*Math.random(),
-				theta: 2*Math.PI*Math.random(),
-			} 
-	});
+	
+	if (machine.name != "random") {
+			setup_machine(nodes,machine)
+	} else {
+		nodes.forEach(function(d){
+			d.state= Math.random() < param.density.widget.value() ? 1 : 0;
+		})
+	}
 	
 };
 
@@ -31,39 +37,33 @@ const go  = () => {
 	
 	param.tick++;
 	
-	each(agents,a=>{
+	nodes.forEach(function(n){
+		let z = sumBy(n.neighbors,function(m){return m.state})
+		if(!n.state){
+			n.nextstate = z==3 ? 1 : 0
+		} else {
+			n.nextstate = (z==2 || z==3) ? 1 : 0
+		}
 		
-		var dx = dt*param.speed.widget.value()*Math.cos(a.theta);
-		var dy = dt*param.speed.widget.value()*Math.sin(a.theta);
-		
-		const x_new = a.x + dx;
-		const y_new = a.y + dy;
-		
-		if (x_new < 0) {dx+=L};
-		if (y_new < 0) {dy+=L};
-		if (x_new > L) {dx-=L};
-		if (y_new > L) {dy-=L};  
-		
-		a.x += dx;
-		a.y += dy;
-		
-		var neighbors = agents.filter(d =>  (d.x-a.x)**2 + (d.y-a.y)**2 <= param.interaction_radius.widget.value()**2 )
-		
-		var mx = mean(map(neighbors,x=> Math.cos(deg2rad(x.theta))));
-		var my = mean(map(neighbors,x=> Math.sin(deg2rad(x.theta))));	
-		
-		a.theta = rad2deg(Math.atan2(my,mx))
-		
-		a.theta += deg2rad(param.wiggle.widget.value())*(Math.random()-0.5)
-		
+		// if (n.state == 0 && n.nextstate==1) {n.newness=1}
+	// 	if (n.state == 1 && n.nextstate==1) {n.newness*=0.95}
+	//		
+	})
+	nodes.forEach(function(n){
+		n.state=n.nextstate;
 	})
 	
 }
 
 const update = () => {
-	
-	each(agents,x => {x.active = x.index < param.number_of_particles.widget.value() ? true : false})
-
+	machine = machines[param.systems.widget.value()];
+	if (machine.name != "random") {
+			setup_machine(nodes,machine)
+	} else {
+		nodes.forEach(function(d){
+			d.state= Math.random() < param.density.widget.value() ? 1 : 0;
+		})
+	}
 }
 
-export {agents,initialize,go,update}
+export {nodes,machine,initialize,go,update}
