@@ -4,6 +4,8 @@
 
 # Nah dah dah nah nah... (Opus, 1984)
 
+[![CC BY 4.0][cc-by-shield]][cc-by]
+
 This explorable is an implementation of the famous [Game of Life](https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life) invented by [John Horton Conway](https://en.wikipedia.org/wiki/John_Horton_Conway) in 1970. Despite its very simple update rules, it can generate a wide range of unexpected dynamics.
 
 The explorable is part of the [**Complexity Exporables Collection**](https://www.complexity-explorables.org). For more information about the system and its behavior consult the explorable
