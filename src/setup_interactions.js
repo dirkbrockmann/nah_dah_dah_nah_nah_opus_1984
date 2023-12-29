@@ -5,6 +5,7 @@ import param from "./parameters.js"
 import resetparameters from "./reset_parameters.js"
 import {iterate,initialize,update} from "./simulation.js"
 import {systems as machines} from "./machines.js"
+import {styles} from "d3-widgets"
 
 var timer = {}
 
@@ -14,14 +15,13 @@ const startstop = (display,config) => {
 
 }
 
-
 function update_slider_visibility(controls){
 	if(ct.go.value()==true ||  machines[param.systems.widget.value()].name != "random") {
 		controls.select("#slider_"+param.density.widget.id()).transition().style("opacity",0)
-		controls.select("#slider_"+param.density.widget.id()).select(" .track-overlay").style("pointer-events","none")
+		controls.select("#slider_"+param.density.widget.id()).select("."+styles.track_overlay).style("pointer-events","none")
 	} else {
 		controls.select("#slider_"+param.density.widget.id()).transition().style("opacity",1)
-		controls.select("#slider_"+param.density.widget.id()).select(" .track-overlay").style("pointer-events","all")
+		controls.select("#slider_"+param.density.widget.id()).select("."+styles.track_overlay).style("pointer-events",null)
 	}
 }
 

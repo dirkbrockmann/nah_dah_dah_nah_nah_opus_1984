@@ -17,7 +17,7 @@ const sliders = map(va,
 					.range(v.range)
 					.value(v.default)
 					.size(cfg.widgets.slider_size)
-					.fontsize(cfg.widgets.fontsize)
+				//	.fontsize(cfg.widgets.fontsize)
 					.girth(cfg.widgets.slider_girth)
 					.knob(cfg.widgets.slider_knob)
 		);
@@ -31,7 +31,7 @@ const radios = map(ch,
 					.orientation(cfg.widgets.radio_orientation)
 					.labelposition(cfg.widgets.radio_label_position)
 					.buttonsize(cfg.widgets.radio_buttonsize)
-						.fontsize(cfg.widgets.fontsize)
+						//.fontsize(cfg.widgets.fontsize)
 		);
 
 

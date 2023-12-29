@@ -15,14 +15,14 @@ module.exports = {
       new HtmlWebpackPlugin({
 		inject:'head' ,
         title: meta.title,
+	    subtitle: meta.subtitle,
 		library: name,
   		template: './src/index.html',
   		anchor: name+"_container",
-   		fig_anchor: name+"_fig_container",
     	  description: meta.description,
 		scriptLoading: 'blocking'
       }),
-	  //new BundleAnalyzerPlugin()
+	 // new BundleAnalyzerPlugin()
     ],
     output: {
       path: path.resolve(__dirname, 'dist'),
@@ -31,12 +31,30 @@ module.exports = {
       clean: true 
     }, 
   module: {
-      rules: [
-        {
-          test: /\.css$/i,
-          use: ['style-loader', 'css-loader'],
-        },
-      ],
+	  rules: [
+	  	     {
+	  	       test: /\.css$/,
+	  	       use: [
+	  	         "style-loader",
+	  	         {
+	  	           loader: "css-loader",
+	  	           options: {
+	  	             importLoaders: 1,
+	  				   modules: {
+	  					   localIdentName: '[hash:base64:5]__[local]',
+	  				   },
+
+	  	           },
+	  	         },
+	  	       ],
+	  	       include: /\.module\.css$/,
+	  	     },
+	  	     {
+	  	       test: /\.css$/,
+	  	       use: ["style-loader", "css-loader"],
+	  	       exclude: /\.module\.css$/,
+	  	     },
+	  	   ]
     },
 	devServer: {
 	    open: true,

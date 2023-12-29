@@ -8,16 +8,14 @@
 	</head>
 	<body>
 	<article class="avenir pa3 pa5-ns tj">
-	<h1 class="f2 fw3"><%= htmlWebpackPlugin.options.title %></h1>	
+	<h1 class="f2 fw3"><%= htmlWebpackPlugin.options.title %> - <%= htmlWebpackPlugin.options.subtitle %></h1>	
 	<p class="lh-copy"><%= htmlWebpackPlugin.options.description %></p>
 
-	<div id="<%= htmlWebpackPlugin.options.anchor %>"></div>
-	<div id="<%= htmlWebpackPlugin.options.fig_anchor %>"></div>
-
+	<div id="<%= htmlWebpackPlugin.options.anchor %>">
+	</div>
 	</article>
 	</body>
 	<script type="text/javascript">
 		<%= htmlWebpackPlugin.options.library %>.load("<%= htmlWebpackPlugin.options.anchor %>");
-		<%= htmlWebpackPlugin.options.library %>.load_fig("<%= htmlWebpackPlugin.options.fig_anchor %>");
 	</script>
 </html>
