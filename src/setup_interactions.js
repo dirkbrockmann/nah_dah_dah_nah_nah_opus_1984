@@ -18,10 +18,10 @@ const startstop = (display,config) => {
 function update_slider_visibility(controls){
 	if(ct.go.value()==true ||  machines[param.systems.widget.value()].name != "random") {
 		controls.select("#slider_"+param.density.widget.id()).transition().style("opacity",0)
-		controls.select("#slider_"+param.density.widget.id()).select("."+styles.track_overlay).style("pointer-events","none")
+		controls.select("#slider_"+param.density.widget.id()).selectAll("*").style("pointer-events","none")
 	} else {
 		controls.select("#slider_"+param.density.widget.id()).transition().style("opacity",1)
-		controls.select("#slider_"+param.density.widget.id()).select("."+styles.track_overlay).style("pointer-events",null)
+		controls.select("#slider_"+param.density.widget.id()).selectAll("*").style("pointer-events",null)
 	}
 }
 

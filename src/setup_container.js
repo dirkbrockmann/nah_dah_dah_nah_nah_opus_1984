@@ -13,7 +13,6 @@ export default (container_id,config)=>{
 		const container = d3.select("#"+container_id).classed(config.id+" "+config.container_class,true);
 		
 
-
 	const display = container.append("div")
 		.attr("id","display")
 		.attr("class","display-panel")
