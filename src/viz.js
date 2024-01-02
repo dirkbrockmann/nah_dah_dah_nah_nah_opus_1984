@@ -12,18 +12,12 @@ var ctx,dL,W,H;
 function draw(display,config){
 	
 	ctx.clearRect(0, 0, W, H);
-	// ctx.strokeStyle = "black";
-	// ctx.strokeRect(0, 0, config.display_size.width, config.display_size.height);
 
 	nodes.filter(function(n){return n.state==1}).forEach(d=>{
 		const c = d.cell();
 		ctx.fillStyle="black"
 		ctx.fillRect(X(c[0].x), Y(c[0].y), (X(c[2].x)-X(c[0].x)), (Y(c[2].y)-Y(c[0].y)));
 	})
-	
-	// ctx.strokeStyle = "black";
-	// ctx.strokeRect(0, 0, config.display_size.width, config.display_size.height);
-	
 	
 }
 
